@@ -34,7 +34,9 @@ public class CyclicBarrierExample {
 
         // Close thread pool
         executorService.shutdown();
-
+        // Reset barrier to 100 again
+        barrier.reset();
+        
         // Show result for Stable class result
         System.out.println("RESULT: " + c.value);
     }
