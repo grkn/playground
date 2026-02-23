@@ -1,15 +1,15 @@
-package playground.concurrency;
+package concurrency;
 
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Supplier;
+
 
 public class CyclicBarrierExample {
 
     public static void main(String[] args) throws InterruptedException {
-        StableMyCustom<Integer> c = StableMyCustom.of();
+        concurrency.StableMyCustom<Integer> c = concurrency.StableMyCustom.of();
         // 100 threads in thread pool
         ExecutorService executorService = Executors.newFixedThreadPool(100);
         // wait 100 threads for to release
@@ -39,28 +39,5 @@ public class CyclicBarrierExample {
         
         // Show result for Stable class result
         System.out.println("RESULT: " + c.value);
-    }
-
-    static class StableMyCustom<T> {
-
-        T value = null;
-
-        private StableMyCustom() {
-        }
-
-        public static <T> StableMyCustom<T> of() {
-            return new StableMyCustom<>();
-        }
-
-        // concurrent access to set operation can cause errors. Use synchronized for same instance
-        public synchronized T orElseSet(Supplier<T> lambda) {
-            // first set operation and value is null
-            if (value == null) {
-                value = lambda.get(); // set operation
-                return value;
-            }
-            // return rest but not set operation executed
-            return value;
-        }
     }
 }
